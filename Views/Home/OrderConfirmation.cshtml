@@ -1,0 +1,26 @@
+﻿@model OrderModel
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h3>Price for your order is: @Model.Price$!</h3>
+    @using (Html.BeginForm("OrderConfirmation", "Home", FormMethod.Post))
+    {
+        @Html.HiddenFor(model => model.PhoneNum)
+        @Html.HiddenFor(model => model.Address)
+
+        @for (int i = 0; i < Model.IngredientsId.Count(); i++)
+        {
+            @Html.HiddenFor(model => model.IngredientsId[i])
+        }
+        @Html.HiddenFor(model => model.PizzaFormId)
+        @Html.HiddenFor(model => model.Price)
+        @Html.HiddenFor(model => model.ClientName)
+
+        <a asp-controller="Home" asp-action="Index">Go back</a>
+        <input type="submit" value="Yes Confirm" />
+    }
+</div>
