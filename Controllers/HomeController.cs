@@ -44,7 +44,13 @@ public class HomeController : Controller
     [HttpPost]
     public IActionResult Index(CreateOrderModel orderInfo)
     {
-        
+        if (!ModelState.IsValid)
+        {
+            orderInfo.Ingredients = Ingredients.IngredientList;
+            orderInfo.PizzaForm = PizzaForms.PizzaFormList;
+            return View("Index", orderInfo);
+        }
+
         OrderModel order = _orderService.SetupOrder(orderInfo);
 
         HttpContext.Session.SetObject<OrderModel>(order.PhoneNum, order);

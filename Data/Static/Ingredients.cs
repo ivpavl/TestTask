@@ -20,7 +20,5 @@ namespace TestTask.Data.Static
             {4, 20},
         };
         
-        
-        // public const string User = "User";
     }
 }

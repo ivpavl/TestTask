@@ -38,17 +38,20 @@
         new {@class = "myClass"  }))
         {
             <div>
-                <p>
-                    <label>Your name:</label><br />
+                <p class="inputItem">
+                    @Html.LabelFor(m => m.Name, "Your name:")
                     @Html.TextBoxFor(m => m.Name)
+                    @Html.ValidationMessageFor(m => m.Name)
                 </p>
-                <p>
-                    <label>Address:</label><br />
+                <p class="inputItem">
+                    @Html.LabelFor(m => m.Address, "Address")
                     @Html.TextBoxFor(m => m.Address)
+                    @Html.ValidationMessageFor(m => m.Address)
                 </p>
-                <p>
-                    <label>Phone number:</label><br />
+                <p class="inputItem">
+                    @Html.LabelFor(m => m.Phone, "Phone num:")
                     @Html.TextBoxFor(m => m.Phone)
+                    @Html.ValidationMessageFor(m => m.Phone)
                 </p>
             </div>
             <div>
@@ -67,13 +70,14 @@
                     @foreach (var PizzaForm in Model.PizzaForm)
                     {
                         <label>
-                            @Html.RadioButtonFor(m => m.SelectedPizzaFormId, PizzaForm.Id)
+                            @Html.RadioButtonFor(m => m.SelectedPizzaFormId, PizzaForm.Id, new {})
+                            @Html.HiddenFor(m => PizzaForm.Id)
                             @PizzaForm.Name
                         </label>
                     }
                 </p>
             </div>
-            <input type="submit" value="Send" />
+            <input type="submit" value="Order my pizza now!" />
         }
     </div>
 </div>

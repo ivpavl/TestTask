@@ -4,7 +4,6 @@ namespace TestTask.Data.Static
 {
     public static class PizzaForms
     {
-
         public static List<PizzaFormModel> PizzaFormList = new List<PizzaFormModel>()
         {
             new PizzaFormModel(){Id = 1, Name = "Small"},

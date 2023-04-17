@@ -55,11 +55,9 @@ public class OrdersService : IOrdersService
         }
 
         PizzaFormModel pizzaForm = PizzaForms.PizzaFormList.FirstOrDefault(x => x.Id == order.PizzaFormId)!;
-        if (pizzaForm is null)
-        {
-            order.PizzaFormText = PizzaForms.DefaultPizzaForm.Name;
-            order.PizzaFormId = PizzaForms.DefaultPizzaForm.Id;
-        }
+        order.PizzaFormText = pizzaForm?.Name ?? PizzaForms.DefaultPizzaForm.Name;
+        order.PizzaFormId = pizzaForm?.Id ?? PizzaForms.DefaultPizzaForm.Id;
+
         return order;
     }
 

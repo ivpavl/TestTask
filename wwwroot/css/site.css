@@ -40,6 +40,11 @@ body {
 footer {
   bottom: auto !important;
 }
+.inputItem {
+  display: flex;
+  flex-direction: column;
+}
+
 
 /* Override carousel control icons color */
 .carousel-control-prev-icon {
