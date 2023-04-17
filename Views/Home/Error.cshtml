@@ -1,0 +1,25 @@
+
+@{
+    ViewData["Title"] = "Error";
+    int Delay = 5000;
+}
+
+<script>
+    function redirectAfterPause(url, delay) {
+        setTimeout(function () {
+            window.location.href = url;
+        }, delay);
+    }
+
+    window.onload = function () {
+        redirectAfterPause("/", @Delay);
+    };
+</script>
+
+
+<div class="text-center">
+    <div>
+        <h3>We have encountered error while processing your order! Please, try again</h3>
+        <p>You will be redirected back in @(Delay / 1000) seconds</p>
+    </div>
+</div>

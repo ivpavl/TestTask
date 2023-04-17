@@ -3,21 +3,26 @@ using Microsoft.AspNetCore.Mvc;
 using TestTask.Models;
 using TestTask.Data.Static;
 using TestTask.Data.Services;
-
+using TestTask.Data.Extensions;
 
 namespace TestTask.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IPriceService _priceService;
     private readonly IOrdersService _orderService;
+    // private readonly ISession _session;
 
-    public HomeController(ILogger<HomeController> logger, IPriceService priceService, IOrdersService orderService)
+    public HomeController(
+        ILogger<HomeController> logger, 
+        IOrdersService orderService
+        // IHttpContextAccessor httpContextAccessor
+        )
     {
-        _logger = logger;
-        _priceService = priceService;
         _orderService = orderService;
+        _logger = logger;
+        // _session = httpContextAccessor.HttpContext.Session;
+
     }
 
     public IActionResult Index()
@@ -37,50 +42,23 @@ public class HomeController : Controller
 
 
     [HttpPost]
-    public IActionResult Index(CreateOrderModel model)
+    public IActionResult Index(CreateOrderModel orderInfo)
     {
         
-        var IngredientsId = new List<int>();
-        foreach(IngredientModel ingredient in model.Ingredients)
-            if(ingredient.IsSelected)
-                IngredientsId.Add(ingredient.Id);
+        OrderModel order = _orderService.SetupOrder(orderInfo);
 
-        int price = _priceService.GetPrice(model.SelectedPizzaFormId, IngredientsId);
+        HttpContext.Session.SetObject<OrderModel>(order.PhoneNum, order);
 
-        OrderModel confirmModel = new OrderModel();
-        confirmModel.Price = price;
-        confirmModel.IngredientsId = IngredientsId;
-        confirmModel.PizzaFormId = model.SelectedPizzaFormId;
-        confirmModel.PhoneNum = model.Phone;
-        confirmModel.ClientName = model.Name;
-
-        return View("OrderConfirmation", confirmModel);
+        return View("OrderConfirmation", order);
     }
 
     [HttpPost]
     public async Task<IActionResult> OrderConfirmation(OrderModel model)
     {
-        // Adding IngredientsText to model
-        for (int i = 0; i < model.IngredientsId.Count(); i++)
-        {
-            foreach (IngredientModel ing in Ingredients.IngredientList)
-            {
-                if (ing.Id == model.IngredientsId[i])
-                    model.IngredientsText += ing.Name + ", ";
-            }
-        }
-
-        // Adding PizzaFormText to model
-        foreach (PizzaFormModel form in PizzaForms.PizzaFormList)
-        {
-            if(form.Id == model.PizzaFormId)
-            {
-                model.PizzaFormText = form.Name;
-                break;
-            }
-        }
-
-
+        model = HttpContext.Session.GetObject<OrderModel>(model.PhoneNum);
+        if(model is null)
+            return View("Error");
+            
         await _orderService.SendInfoToEmail(model);
         await _orderService.SaveOrderToDb(model);
 

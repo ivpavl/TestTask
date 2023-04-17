@@ -11,6 +11,10 @@ namespace TestTask.Data.Static
             new PizzaFormModel(){Id = 2, Name = "Medium"},
             new PizzaFormModel(){Id = 3, Name = "Large"},
         };
+        public static PizzaFormModel DefaultPizzaForm = new PizzaFormModel()
+        {
+            Id = 1, Name = "Small"
+        };
         public static Dictionary<int, int> PizzaFormIdToPrice = new Dictionary<int, int>()
         {
             {1, 3},

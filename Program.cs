@@ -9,8 +9,17 @@ builder.Services.AddControllersWithViews();
 // builder.Services.AddScoped<IOrdersService, OrdersService>();
 builder.Services.AddScoped<IPriceService, PriceService>();
 builder.Services.AddScoped<IOrdersService, OrdersService>();
-
 builder.Services.AddSingleton(builder.Configuration);
+
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromMinutes(20); // Set session timeout
+            options.Cookie.HttpOnly = true; // Set HttpOnly flag on session cookie
+            options.Cookie.IsEssential = true; // Mark session cookie as essential
+        });
+
 
 builder.Services.AddDbContext<AppDbContext>(options => {
     options.UseSqlite(
@@ -35,7 +44,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseSession();
 
 
 app.UseRouting();

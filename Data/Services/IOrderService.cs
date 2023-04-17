@@ -5,5 +5,6 @@ public interface IOrdersService
 {
         Task SaveOrderToDb(OrderModel orderInfo);
         Task SendInfoToEmail(OrderModel orderInfo);
+        OrderModel SetupOrder(CreateOrderModel createOrderInfo);
 
 }
